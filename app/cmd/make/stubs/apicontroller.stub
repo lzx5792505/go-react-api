@@ -1,0 +1,97 @@
+package v1
+
+import (
+    "liu/app/models/{{PackageName}}"
+    "liu/app/policies"
+    "liu/app/requests"
+    "liu/pkg/response"
+
+    "github.com/gin-gonic/gin"
+)
+
+type {{StructNamePlural}}Controller struct {
+    BaseController
+}
+
+func (ctrl *{{StructNamePlural}}Controller) Index(ctx *gin.Context) {
+    {{VariableNamePlural}} := {{PackageName}}.All()
+    response.Data(ctx, {{VariableNamePlural}})
+}
+
+func (ctrl *{{StructNamePlural}}Controller) Show(ctx *gin.Context) {
+    {{VariableName}}Model := {{PackageName}}.Get(ctx.Param("id"))
+    if {{VariableName}}Model.ID == 0 {
+        response.Abort404(ctx)
+        return
+    }
+    response.Data(ctx, {{VariableName}}Model)
+}
+
+func (ctrl *{{StructNamePlural}}Controller) Store(ctx *gin.Context) {
+    request := requests.{{StructName}}Request{}
+    if ok := requests.Validate(ctx, &request, requests.{{StructName}}Save); !ok {
+        return
+    }
+
+    {{VariableName}}Model := {{PackageName}}.{{StructName}}{
+        FieldName:      request.FieldName,
+    }
+    {{VariableName}}Model.Create()
+    if {{VariableName}}Model.ID > 0 {
+        response.Created(ctx, {{VariableName}}Model)
+    } else {
+        response.Abort500(ctx, "创建失败，请稍后尝试~")
+    }
+}
+
+func (ctrl *{{StructNamePlural}}Controller) Update(ctx *gin.Context) {
+    {{VariableName}}Model := {{PackageName}}.Get(ctx.Param("id"))
+    if {{VariableName}}Model.ID == 0 {
+        response.Abort404(ctx)
+        return
+    }
+
+    if ok := policies.CanModify{{StructName}}(ctx, {{VariableName}}Model); !ok {
+        response.Abort403(ctx)
+        return
+    }
+
+    request := requests.{{StructName}}Request{}
+    bindOk, errs := requests.Validate(ctx, &request, requests.{{StructName}}Save)
+    if !bindOk {
+        return
+    }
+    if len(errs) > 0 {
+        response.ValidationError(ctx, 20101, errs)
+        return
+    }
+
+    {{VariableName}}Model.FieldName = request.FieldName
+    rowsAffected := {{VariableName}}Model.Save()
+    if rowsAffected > 0 {
+        response.Data(ctx, {{VariableName}}Model)
+    } else {
+        response.Abort500(ctx, "更新失败，请稍后尝试~")
+    }
+}
+
+func (ctrl *{{StructNamePlural}}Controller) Delete(ctx *gin.Context) {
+    {{VariableName}}Model := {{PackageName}}.Get(ctx.Param("id"))
+    if {{VariableName}}Model.ID == 0 {
+        response.Abort404(ctx)
+        return
+    }
+
+    if ok := policies.CanModify{{StructName}}(ctx, {{VariableName}}Model); !ok {
+        response.Abort403(ctx)
+        return
+    }
+
+    rowsAffected := {{VariableName}}Model.Delete()
+    if rowsAffected > 0 {
+        response.Success(ctx)
+        return
+    }
+
+    response.Abort500(ctx, "删除失败，请稍后尝试~")
+}
