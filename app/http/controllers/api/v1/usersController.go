@@ -101,7 +101,8 @@ func (us *UsersController) DelUser(ctx *gin.Context) {
 
 	NoticeMsg(ctx, _user.ID)
 
-	rows := _user.Delete()
-
-	RowsMsg(ctx, rows, "删除失败，请稍后尝试~")
+	if _user.ID != 1 {
+		rows := _user.Delete()
+		RowsMsg(ctx, rows, "删除失败，请稍后尝试~")
+	}
 }

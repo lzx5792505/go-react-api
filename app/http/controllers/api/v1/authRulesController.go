@@ -87,9 +87,11 @@ func (ctrl *AuthRulesController) RuleStatus(ctx *gin.Context) {
 // 删除
 func (ctrl *AuthRulesController) DelRule(ctx *gin.Context) {
 	_rule := auth_rule.Get(ctx.Param("id"))
+
 	NoticeMsg(ctx, _rule.ID)
 
-	rows := _rule.Delete()
-
-	RowsMsg(ctx, rows, "删除失败，请稍后尝试~")
+	if _rule.ID != 1 {
+		rows := _rule.Delete()
+		RowsMsg(ctx, rows, "删除失败，请稍后尝试~")
+	}
 }
