@@ -18,6 +18,11 @@ func (ctrl *AuthRulesController) RuleList(ctx *gin.Context) {
 	response.Data(ctx, authRules)
 }
 
+func (ctrl *AuthRulesController) RuleOne(ctx *gin.Context) {
+	_rule := auth_rule.Get(ctx.Param("id"))
+	response.Data(ctx, _rule)
+}
+
 // 保存
 func (ctrl *AuthRulesController) RuleStore(ctx *gin.Context) {
 	request := requests.AuthRuleRequest{}
@@ -26,13 +31,15 @@ func (ctrl *AuthRulesController) RuleStore(ctx *gin.Context) {
 	}
 
 	_rule := auth_rule.AuthRule{
-		Pid:    request.Pid,
-		Title:  request.Title,
-		Name:   request.Name,
-		Icon:   request.Icon,
-		Sort:   request.Sort,
-		Menu:   request.Menu,
-		Status: request.Status,
+		Pid:       request.Pid,
+		Title:     request.Title,
+		Name:      request.Name,
+		Icon:      request.Icon,
+		Sort:      request.Sort,
+		Menu:      request.Menu,
+		Status:    request.Status,
+		Type:      1,
+		Condition: "1",
 	}
 
 	_rule.Create()

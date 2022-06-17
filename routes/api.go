@@ -89,6 +89,8 @@ func RegisterAPIRoutes(r *gin.Engine) {
 			ar := new(controllers.AuthRulesController)
 			// 获取所有菜单
 			menuGroup.GET("", middlewares.AuthJWT(), ar.RuleList)
+			// 单个用户
+			menuGroup.GET("/one/:id", middlewares.AuthJWT(), ar.RuleOne)
 			// 添加
 			menuGroup.POST("/store", middlewares.AuthJWT(), ar.RuleStore)
 			// 更新

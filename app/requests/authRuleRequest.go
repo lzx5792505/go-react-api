@@ -6,7 +6,7 @@ import (
 )
 
 type AuthRuleRequest struct {
-	Pid    uint64 `valid:"pid" json:"pid,omitempty"`
+	Pid    string `valid:"pid" json:"pid,omitempty"`
 	Title  string `valid:"title" json:"title,omitempty"`
 	Name   string `valid:"name" json:"name,omitempty"`
 	Icon   string `valid:"icon" json:"icon,omitempty"`
@@ -21,7 +21,7 @@ type RuleStatusRequest struct {
 
 func AuthRuleSave(data interface{}, ctx *gin.Context) map[string][]string {
 	rules := govalidator.MapData{
-		"pid":    []string{"required", "not_exists:auth_rules,pid"},
+		"pid":    []string{"required"},
 		"title":  []string{"required", "min_cn:2", "max_cn:18", "not_exists:auth_rules,title"},
 		"name":   []string{"required", "min_cn:2", "max_cn:18", "not_exists:auth_rules,name"},
 		"icon":   []string{"alpha_num", "between:3,32"},
@@ -32,7 +32,6 @@ func AuthRuleSave(data interface{}, ctx *gin.Context) map[string][]string {
 	messages := govalidator.MapData{
 		"pid": []string{
 			"required:顶级菜单为必填项",
-			"not_exists:顶级菜单名称已存在",
 		},
 		"title": []string{
 			"required:顶级菜单为必填项",

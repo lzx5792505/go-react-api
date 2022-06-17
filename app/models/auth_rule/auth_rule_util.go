@@ -4,17 +4,17 @@ import (
 	"liu/pkg/database"
 )
 
-func Get(idStr string) (authRule AuthRule) {
-	database.DB.Where("id", idStr).First(&authRule)
+func Get(idStr string) (_rule AuthRule) {
+	database.DB.Where("id", idStr).First(&_rule)
 	return
 }
 
-func GetByField(field, value string) (authRule AuthRule) {
-	database.DB.Where("? = ?", field, value).First(&authRule)
+func GetByField(field, value string) (_rule AuthRule) {
+	database.DB.Where("? = ?", field, value).First(&_rule)
 	return
 }
 
-func All() (authRules []AuthRule) {
-	database.DB.Find(&authRules)
+func All() (_rule []AuthRule) {
+	database.DB.Find(&_rule)
 	return
 }

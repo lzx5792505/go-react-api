@@ -9,7 +9,7 @@ import (
 type AuthRule struct {
 	models.BaseModel
 
-	Pid       uint64 `json:"pid,omitempty"`
+	Pid       string `json:"pid,omitempty"`
 	Title     string `json:"title,omitempty"`
 	Name      string `json:"name,omitempty"`
 	Icon      string `json:"icon,omitempty"`
@@ -22,16 +22,16 @@ type AuthRule struct {
 	models.TimestampsField
 }
 
-func (authRule *AuthRule) Create() {
-	database.DB.Create(&authRule)
+func (_rule *AuthRule) Create() {
+	database.DB.Create(&_rule)
 }
 
-func (authRule *AuthRule) Save() (rowsAffected int64) {
-	result := database.DB.Save(&authRule)
+func (_rule *AuthRule) Save() (rowsAffected int64) {
+	result := database.DB.Save(&_rule)
 	return result.RowsAffected
 }
 
-func (authRule *AuthRule) Delete() (rowsAffected int64) {
-	result := database.DB.Delete(&authRule)
+func (_rule *AuthRule) Delete() (rowsAffected int64) {
+	result := database.DB.Delete(&_rule)
 	return result.RowsAffected
 }
